@@ -19,11 +19,32 @@ streamIOTest ~(Success : ~(Char c : ~(Success : ~_))) =
     PutStr ("\nThe character you typed was " ++ show c ++ "\n")
   ]
 
+--
+-- I'm not sure about this but I think the reason that the type signature
+-- is [Response] -> [Request] and not the other way around is that
+-- it solves the problem of how to pattern match against the Response to
+-- a previous Request. Let's just have a look at streamIOTest above.
+--
+-- If you tried to write it as a function with type [Request] -> [Response]
+-- things quickly go awry!
+--
+-- How do you know the value of 'c' for the third request?
+--
+-- e.g.
+--
+-- streamIOTest [ PutStr "Enter a character: ",
+--                GetChar,
+--                PutStr ("\nThe character you typed was " ++ show c ++ "\n")
+--               ] = ...
+--
+
+
 {-
 
-map f [] = []
-map f (x:xs) = f x : map f xs
+Could you write it this way?
 
+f1 [PutStr "enter a char"] = [Success]
+f2 [GetChar] = [Char c] -- again, where does the 'c' come from ?
 
 -}
 
